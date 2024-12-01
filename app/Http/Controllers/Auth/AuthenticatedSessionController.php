@@ -7,32 +7,84 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Handle an incoming authentication request.
+     * Login to the app.
+     *
+     * @param LoginRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        try {
+            // Authenticate the user
+            $request->authenticate();
 
-        $request->session()->regenerate();
+            // Delete all existing tokens for the authenticated user
+            $request->user()->tokens()->delete();
 
-        return response()->noContent();
+            // Get user details
+            $user = $request->user();
+
+            // Call the login method (ensure this exists and returns necessary data)
+            $response = $user->login();
+
+            // Return a JSON response with user data and message
+            return response()->json([
+                'data' => $response,
+                'message' => 'Successfully logged in'
+            ], 200);
+
+        } catch (AuthenticationException $e) {
+            // Catch AuthenticationException and return an unauthorized response
+            return response()->json([
+                'errors' => [$e->getMessage(), 'Unauthorized access'],
+                'message' => 'Invalid credentials'
+            ], 401);
+
+        } catch (ValidationException $e) {
+            // Catch ValidationException and return a validation error response
+            return response()->json([
+                'errors' => $e->errors(),
+                'message' => 'Validation error'
+            ], 422);
+
+        } catch (Exception $e) {
+            // Catch any general exception
+            return response()->json([
+                'errors' => [$e->getMessage()],
+                'message' => 'Login error'
+            ], 500);
+        }
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout function.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
+        try {
+            // Delete the current access token
+            $request->user()->currentAccessToken()->delete();
 
-        $request->session()->invalidate();
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ], 200);
 
-        $request->session()->regenerateToken();
-
-        return response()->noContent();
+        } catch (\Exception $e) {
+            // Handle any exceptions that might occur during logout
+            return response()->json([
+                'errors' => [$e->getMessage()],
+                'message' => 'Logout error'
+            ], 500);
+        }
     }
 }
