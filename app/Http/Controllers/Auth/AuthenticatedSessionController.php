@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
@@ -31,9 +32,12 @@ class AuthenticatedSessionController extends Controller
 
             // Get user details
             $user = $request->user();
+            $expiresAt = Carbon::now()->addDays(30);
 
+            // Create a new token for the user
+            $token = $user->createToken('login-token', ['*'], $expiresAt);
             // Call the login method (ensure this exists and returns necessary data)
-            $response = $user->login();
+            $response = $token->plainTextToken;
 
             // Return a JSON response with user data and message
             return response()->json([
