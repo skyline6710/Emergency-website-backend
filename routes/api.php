@@ -11,3 +11,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // Public routes (accessible without authentication)
 Route::apiResource('services', ServiceController::class)->only(['index', 'show']);
+
+require __DIR__.'/auth.php';
