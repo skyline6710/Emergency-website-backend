@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('provider');
-            $table->string('represintative');
+            $table->string('representative');
             $table->string('serviceType');
-            $table->string('coverdArea');
-            $table->string('contactInfor');
-            $table->string('avaliableTime');
+            $table->string('coveredArea');
+            $table->string('contactInform');
+            $table->string('availableTime');
             $table->text('moreInfo');
             $table->timestamps();
         });

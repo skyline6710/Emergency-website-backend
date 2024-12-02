@@ -8,11 +8,11 @@ class Service extends Model
 {
     protected $fillable = [
         'provider',
-        'represintative',
+        'representative',
         'serviceType',
-        'coverdArea',
-        'contactInfor',
-        'avaliableTime',
+        'coveredArea',
+        'contactInform',
+        'availableTime',
         'moreInfo'
     ];
 }

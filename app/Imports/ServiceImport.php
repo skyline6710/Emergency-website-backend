@@ -20,9 +20,9 @@ class ServiceImport implements ToCollection, WithHeadingRow
             Service::create([
                 'provider'       => $row['اسم الجهة/الشخص'] ?? null,
                 'serviceType'    => $row['نوع الخدمة'] ?? null,
-                'coverdArea'     => $row['المناطق المتاحة للخدمة'] ?? null,
-                'contactInfor'   => $row['وسيلة الاتصال'] ?? null,
-                'avaliableTime'  => $row['الوقت المتاح للخدمة'] ?? null,
+                'coveredArea'     => $row['المناطق المتاحة للخدمة'] ?? null,
+                'contactInform'   => $row['وسيلة الاتصال'] ?? null,
+                'availableTime'  => $row['الوقت المتاح للخدمة'] ?? null,
                 'moreInfo'       => $row['تعليمات إضافية'] ?? null,
             ]);
         }

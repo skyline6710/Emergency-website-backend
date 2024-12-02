@@ -26,7 +26,7 @@ class ServiceRequest extends FormRequest
             'representative' => 'required|string|max:255',
             'serviceType' => 'required|string|max:255',
             'coveredArea' => 'required|string|max:255',
-            'contactInfo' => [
+            'contactInform' => [
                 'required',
                 'string',
                 'max:15',

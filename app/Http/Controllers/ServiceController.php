@@ -23,7 +23,7 @@ class ServiceController extends Controller
     {
         try {
             // Retrieve all services from the database
-            $services = Service::all();
+            $services = Service::all()->groupBy('coveredArea');
 
             // Return the list of services as a JSON response
             return response()->json($services);
